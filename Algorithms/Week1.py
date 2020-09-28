@@ -2,11 +2,12 @@
 #
 # Week: 1
 # Program Aim: To filter the text by extracting word and pos tag for the word
+# Date: September 28, 2020
 # Author: Ritik Jain
+# Team: Ritik Jain, Priyanshu Garg, Yugantar Arya
 #
 # Procedure:
 # The program does its job in 2 phases
-#
 # The number of phases could have been reduced to 1 ( and the time halved as well) but I went with this code
 # since it doesn't take much time to preprocess all the files and it has to be done once; hence I prefered clarity
 # of code over the small extra time it takes
@@ -64,7 +65,7 @@ def runWeek1():
             lines = fp.readlines()
             fp.close()
             for line in lines:
-                collector.write(line+'\n')
+                collector.write(line)
             stats += 1
             stdout.write(f'\rCollected {stats} files')
         else:
