@@ -7,10 +7,20 @@
 # Team: Ritik Jain, Priyanshu Garg, Yugantar Arya
 #
 # Procedure:
+# The application works in two phases. The first phase involves the construction
+# of a human-readable dictionary files from both the collected test and train files.
+# The second phase involves the construction of a serialized dictionary file
+# for fast-access.
 #
 # Phase 1: Construction of the dictionary in file
+# The collected files are used to create a dictionary (a hashmap) that
+# maps a pair (word, tag) to frequency. The dictionary is stored in a human readable
+# format in a dict file and as a hashmap in the memory.
 #
 # Phase 2: Construction of the serialized dictionary for fast loading
+# This phase involves the serialization of the hashmap in memory using pickle, so that
+# whenever the dictionary is required, it could be loaded rapidly in to the memory
+# from disk.
 
 import pickle
 from os import mkdir
@@ -23,7 +33,7 @@ def runWeek2():
     def buildDict(collect,dest):
         nonlocal freqdict
         fp = open(collect,"r")
-        raw = fp.read().splitlines()
+        raw = fp.read().split(';')
         fp.close()
         for item in raw:
             if item in freqdict: freqdict[item] += 1
@@ -87,5 +97,3 @@ def runWeek2():
     print('End Constructing Serialized Test Dictionary')
     print()
     print('Dictionary Construction Sucessful!')
-
-runWeek2()
