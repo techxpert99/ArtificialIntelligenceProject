@@ -52,7 +52,7 @@ def runWeek1():
         fp.close()
         fp = open(dest,"w",encoding=en)
         for match in matches:
-            fp.write(match[1]+'_'+match[0]+';')
+            fp.write(match[1]+'_'+match[0]+'\n')
         fp.close()
         stats += 1
         stdout.write(f'\rFiltered {stats} files')
@@ -81,19 +81,22 @@ def runWeek1():
                 collect(root+'/'+file)
 
     def verify(root):
-        def count(file,en,pat,out):
+        def count(file,en,pat,out,delim=True):
             with open(file,'r',encoding=en) as f:
-                L = len(findall(pat,str().join(f.read().splitlines())))
+                if delim:
+                    L = len(findall(pat,str().join(f.read().splitlines())))
+                else:
+                    L = len(findall(pat,f.read()))
                 out.write(f'{file}${L}\n')
                 return L
             return 0
-        def explore(root,en,pat,out):
+        def explore(root,en,pat,out,delim=True):
             if isfile(root):
-                return count(root,en,pat,out)
+                return count(root,en,pat,out,delim)
             else:
                 total = 0
                 for file in listdir(root):
-                    total += explore(root+'\\'+file,en,pat,out)
+                    total += explore(root+'\\'+file,en,pat,out,delim)
                 return total
         
         if(not isdir(root+'verification_records')):
@@ -104,11 +107,11 @@ def runWeek1():
             out.write(f'$TOTAL$ = {xcount1}')
 
         with open(root+'verification_records/filtered.verify','w') as out:
-            xcount2 = explore(root+'filtered_data','utf-8',';',out)
+            xcount2 = explore(root+'filtered_data','utf-8','\n',out,False)
             out.write(f'$TOTAL$ = {xcount2}')
 
         ratio = xcount2/xcount1
-        acc = (1-abs(ratio-1))*100
+        acc = abs((1-abs(ratio-1)))*100
         print(f'Verification Ratio: {round(ratio,4)}')
 
         print(f'Estimated Accuracy: {round(acc,2)}%')

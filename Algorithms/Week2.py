@@ -1,22 +1,22 @@
 # Artificial Intelligence Assignment
-#
+
 # Week: 2
 # Program Aim: To create a dictionary which maps word,tag to its frequency
 # Date: September 28, 2020
 # Author: Ritik Jain
 # Team: Ritik Jain, Priyanshu Garg, Yugantar Arya
-#
+
 # Procedure:
 # The application works in two phases. The first phase involves the construction
 # of a human-readable dictionary files from both the collected test and train files.
 # The second phase involves the construction of a serialized dictionary file
 # for fast-access.
-#
+
 # Phase 1: Construction of the dictionary in file
 # The collected files are used to create a dictionary (a hashmap) that
 # maps a pair (word, tag) to frequency. The dictionary is stored in a human readable
 # format in a dict file and as a hashmap in the memory.
-#
+
 # Phase 2: Construction of the serialized dictionary for fast loading
 # This phase involves the serialization of the hashmap in memory using pickle, so that
 # whenever the dictionary is required, it could be loaded rapidly in to the memory
@@ -32,13 +32,13 @@ def runWeek2():
     
     def buildDict(collect,dest):
         nonlocal freqdict
-        fp = open(collect,"r")
-        raw = fp.read().split(';')
+        fp = open(collect,"r",encoding='utf-8')
+        raw = fp.read().splitlines()
         fp.close()
         for item in raw:
             if item in freqdict: freqdict[item] += 1
             else: freqdict[item] = 1
-        fp = open(dest,"w")
+        fp = open(dest,"w",encoding='utf-8')
         for k,v in freqdict.items():
             fp.write(k+':'+str(v)+'\n')
         fp.close()
@@ -59,7 +59,7 @@ def runWeek2():
     else:
         print('Continuing with the default root')
     
-    sroot = root+'filtered_data/'
+    sroot = root+'collected_data/'
     droot = root+'freq_dicts/'
     if not isdir(droot):
         mkdir(droot)
@@ -74,7 +74,7 @@ def runWeek2():
     print()
     print()
     print('Begin Constructing Train Dictionary')
-    buildDict(sroot+'train-corpus.collect',droot+'train-corpus.dict')
+    buildDict(sroot+'train-corpus.collect',droot+'train-dict.dict')
     traindict = freqdict.copy()
     print('End Constructing Train Dictionary')
     print()
@@ -93,7 +93,7 @@ def runWeek2():
     print()
     print('Begin Constructing Serialized Train Dictionary')
     freqdict = traindict
-    buildSerializedDict(droot+'train-corpus.pickle')
+    buildSerializedDict(droot+'train-dict.pickle')
     print('End Constructing Serialized Test Dictionary')
     print()
     print('Dictionary Construction Sucessful!')
