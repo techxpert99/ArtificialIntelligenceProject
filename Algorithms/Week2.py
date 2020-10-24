@@ -29,6 +29,7 @@ from os.path import isdir
 def runWeek2():
     
     freqdict = dict()
+    refineddict = dict()
     
     def buildDict(collect,dest):
         nonlocal freqdict
@@ -42,6 +43,19 @@ def runWeek2():
         for k,v in freqdict.items():
             fp.write(k+':'+str(v)+'\n')
         fp.close()
+
+    def buildRefinedDict(dest):
+        nonlocal refineddict
+        for k,v in freqdict.items():
+            c5,hw,pos,w = k.split('_')
+            item = w+'_'+c5
+            if item in refineddict:
+                refineddict[item] += v
+            else:
+                refineddict[item] = v
+        fp = open(dest,"w",encoding='utf-8')
+        for k,v in refineddict.items():
+            fp.write(k+':'+str(v)+'\n')
 
     def buildSerializedDict(dest):
         fp = open(dest,"wb")
@@ -70,12 +84,18 @@ def runWeek2():
     print('Begin Constructing Test Dictionary')
     buildDict(sroot+'test-corpus.collect',droot+'test-dict.dict')
     testdict = freqdict.copy()
+    buildRefinedDict(droot+'test-refdict.dict')
+    testrefdict = refineddict.copy()
     print('End Constructing Test Dictionary')
     print()
     print()
     print('Begin Constructing Train Dictionary')
+    freqdict = dict()
+    refineddict = dict()
     buildDict(sroot+'train-corpus.collect',droot+'train-dict.dict')
     traindict = freqdict.copy()
+    buildRefinedDict(droot+'train-refdict.dict')
+    trainrefdict = refineddict.copy()
     print('End Constructing Train Dictionary')
     print()
     print()
@@ -88,12 +108,18 @@ def runWeek2():
     print('Begin Constructing Serialized Test Dictionary')
     freqdict = testdict
     buildSerializedDict(droot+'test-dict.pickle')
+    freqdict = testrefdict
+    buildSerializedDict(droot+'test-refdict.pickle')
     print('End Constructing Serialized Test Dictionary')
     print()
     print()
     print('Begin Constructing Serialized Train Dictionary')
     freqdict = traindict
     buildSerializedDict(droot+'train-dict.pickle')
+    freqdict = trainrefdict
+    buildSerializedDict(droot+'train-refdict.pickle')
     print('End Constructing Serialized Test Dictionary')
     print()
     print('Dictionary Construction Sucessful!')
+
+runWeek2()

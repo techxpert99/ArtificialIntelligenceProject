@@ -44,7 +44,7 @@ from sys import stdout
 
 def runWeek1(): 
 
-    def filterFile(source,dest,pat = '<\\s*w[^>]*pos="([A-Za-z]*)"[^>]*>\\s*([^<\\s]*)\\s*<\\s*/w\\s*>',en="utf-8"):
+    def filterFile(source,dest,pat = '<\\s*w[^>]*c5\\s*=\\s*"([^"]*)"[^>]*hw\\s*=\\s*"([^"]*)"[^>]*pos\\s*=\\s*"([^"]*)"[^>]*>\\s*([^<\\s]*)\\s*<\\s*/w\\s*>',en="utf-8"):
         nonlocal stats
         fp = open(source,"r",encoding=en)
         text = str().join(fp.read().splitlines())
@@ -52,7 +52,7 @@ def runWeek1():
         fp.close()
         fp = open(dest,"w",encoding=en)
         for match in matches:
-            fp.write(match[1]+'_'+match[0]+'\n')
+            fp.write(match[0]+'_'+match[1]+'_'+match[2]+'_'+match[3]+'\n')
         fp.close()
         stats += 1
         stdout.write(f'\rFiltered {stats} files')
